@@ -1,1 +1,3 @@
-asd
+read google foobar
+golang practice problem
+react typescript ? sure : other projects/courses
