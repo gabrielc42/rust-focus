@@ -1,60 +1,46 @@
 import { useState } from "react";
-import reactLogo from "./assets/react.svg";
 import { invoke } from "@tauri-apps/api/tauri";
 import "./App.css";
+import React from "react";
 
 function App() {
-
   const [content, setContent] = React.useState('')
+  const handleKeyDown = async (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      await invoke('add_task', { content })
+    }
+  }
 
-  return <input type="text"
-          value={content}
-          onChange={e => setContent (e.target.value)}
-          onKeyDown={e => e.key === 'Enter' &&
-        console.log(content)}
-          className="w-[800px] h-[80px] bg-[#222] text-2xl text-white px-6" />
+  const [greetMsg, setGreetMsg] = useState("");
+  const [name, setName] = useState("");
 
-  // const [greetMsg, setGreetMsg] = useState("");
-  // const [name, setName] = useState("");
+  async function greet() {
+    // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
+    setGreetMsg(await invoke("greet", { name }));
+  }
 
-  // async function greet() {
-  //   // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
-  //   setGreetMsg(await invoke("greet", { name }));
-  // }
+  return <div>
+    <div className="row">
+      <input type="text"
+        value={content}
+        onChange={e => setContent(e.target.value)}
+        onKeyDown={handleKeyDown}
+        className="w-[800px] h-[80px] bg-[#222] text-2xl text-white px-6" />
 
-  // return (
-  //   <div className="container">
-  //     <h1>Welcome to Tauri!</h1>
+      <div>
+        <input
+          id="greet-input"
+          onChange={(e) => setName(e.currentTarget.value)}
+          placeholder="Enter a name..."
+        />
+        <button type="button" onClick={() => greet()}>
+          button
+        </button>
+      </div>
+    </div>
+    <p>{greetMsg}</p>
 
-  //     <div className="row">
-  //       <a href="https://vitejs.dev" target="_blank">
-  //         <img src="/vite.svg" className="logo vite" alt="Vite logo" />
-  //       </a>
-  //       <a href="https://tauri.app" target="_blank">
-  //         <img src="/tauri.svg" className="logo tauri" alt="Tauri logo" />
-  //       </a>
-  //       <a href="https://reactjs.org" target="_blank">
-  //         <img src={reactLogo} className="logo react" alt="React logo" />
-  //       </a>
-  //     </div>
-
-  //     <p>Click on the Tauri, Vite, and React logos to learn more.</p>
-
-  //     <div className="row">
-  //       <div>
-  //         <input
-  //           id="greet-input"
-  //           onChange={(e) => setName(e.currentTarget.value)}
-  //           placeholder="Enter a name..."
-  //         />
-  //         <button type="button" onClick={() => greet()}>
-  //           Greet
-  //         </button>
-  //       </div>
-  //     </div>
-  //     <p>{greetMsg}</p>
-  //   </div>
-  // );
+  </div>
 }
 
 export default App;
