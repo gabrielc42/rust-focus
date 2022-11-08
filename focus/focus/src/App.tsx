@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { invoke } from "@tauri-apps/api/tauri";
+import {process} from '@tauri-apps/api';
 import "./App.css";
 import React from "react";
 
@@ -8,16 +9,17 @@ function App() {
   const handleKeyDown = async (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       await invoke('add_task', { content })
+      process.exit()
     }
   }
 
-  const [greetMsg, setGreetMsg] = useState("");
-  const [name, setName] = useState("");
+  // const [greetMsg, setGreetMsg] = useState("");
+  // const [name, setName] = useState("");
 
-  async function greet() {
-    // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
-    setGreetMsg(await invoke("greet", { name }));
-  }
+  // async function greet() {
+  //   // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
+  //   setGreetMsg(await invoke("greet", { name }));
+  // }
 
   return <div>
     <div className="row">
@@ -27,18 +29,19 @@ function App() {
         onKeyDown={handleKeyDown}
         className="w-[800px] h-[80px] bg-[#222] text-2xl text-white px-6" />
 
-      <div>
+      {/* <div>
         <input
+          //value={name}
           id="greet-input"
-          onChange={(e) => setName(e.currentTarget.value)}
+          onChange={(e) => setName(e.target.value)}
           placeholder="Enter a name..."
         />
         <button type="button" onClick={() => greet()}>
           button
         </button>
-      </div>
+      </div> */}
     </div>
-    <p>{greetMsg}</p>
+    {/* <p>{greetMsg}</p> */}
 
   </div>
 }
